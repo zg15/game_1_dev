@@ -17,6 +17,7 @@
 		F52FF21C21CAC85D0094F346 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F52FF21A21CAC85D0094F346 /* LaunchScreen.storyboard */; };
 		F52FF22721CAC85D0094F346 /* game_1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52FF22621CAC85D0094F346 /* game_1Tests.swift */; };
 		F52FF23221CAC85D0094F346 /* game_1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52FF23121CAC85D0094F346 /* game_1UITests.swift */; };
+		F55B64A121D301E5006816FF /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = F55B64A021D301E5006816FF /* MyTileSet.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		F52FF22D21CAC85D0094F346 /* game_1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = game_1UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F52FF23121CAC85D0094F346 /* game_1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = game_1UITests.swift; sourceTree = "<group>"; };
 		F52FF23321CAC85D0094F346 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F55B64A021D301E5006816FF /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				F52FF21821CAC85D0094F346 /* Assets.xcassets */,
 				F52FF21A21CAC85D0094F346 /* LaunchScreen.storyboard */,
 				F52FF21D21CAC85D0094F346 /* Info.plist */,
+				F55B64A021D301E5006816FF /* MyTileSet.sks */,
 			);
 			path = game_1;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55B64A121D301E5006816FF /* MyTileSet.sks in Resources */,
 				F52FF21721CAC85B0094F346 /* Main.storyboard in Resources */,
 				F52FF20E21CAC85B0094F346 /* GameScene.sks in Resources */,
 				F52FF21921CAC85D0094F346 /* Assets.xcassets in Resources */,
