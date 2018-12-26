@@ -15,11 +15,17 @@ class GameScene: SKScene {
 //    private var spinnyNode : SKShapeNode?
     var player:SKSpriteNode!
     
+//    var enemy:SKSpriteNode!
+    
     var velocity:Double! = 500
     
     var cam: SKCameraNode?
     
+    var timer = Timer()
+    
     override func didMove(to view: SKView) {
+        
+        scheduledTimerWithTimeInterval()
         
         cam = SKCameraNode()
         
@@ -38,6 +44,19 @@ class GameScene: SKScene {
         player.physicsBody?.restitution = 1
         player.physicsBody?.linearDamping = 0
         player.physicsBody?.angularDamping = 0
+        
+//        enemy = SKSpriteNode(imageNamed: "enemy")
+//        let eTexture:SKTexture! = enemy.texture
+//        let eSize:CGSize! = enemy.texture?.size()
+//        enemy.physicsBody = SKPhysicsBody(texture: eTexture, size: eSize)
+//        enemy.physicsBody?.isDynamic = true
+//        enemy.physicsBody?.friction = 0
+//        enemy.physicsBody?.allowsRotation = false
+//        enemy.physicsBody?.affectedByGravity = false
+//        enemy.physicsBody?.restitution = 1
+//        enemy.physicsBody?.linearDamping = 0
+//        enemy.physicsBody?.angularDamping = 0
+        
         
         self.addChild(player)
         
@@ -87,6 +106,31 @@ class GameScene: SKScene {
 //                                              SKAction.fadeOut(withDuration: 0.5),
 //                                              SKAction.removeFromParent()]))
 //        }
+    }
+    
+    func scheduledTimerWithTimeInterval(){
+        // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateCounting(){
+//        NSLog("counting..")
+        print("10s passed")
+        var enemy: SKSpriteNode!
+        enemy = SKSpriteNode(imageNamed: "enemy")
+        let eTexture:SKTexture! = enemy.texture
+        let eSize:CGSize! = enemy.texture?.size()
+        enemy.physicsBody = SKPhysicsBody(texture: eTexture, size: eSize)
+        enemy.physicsBody?.isDynamic = true
+        enemy.physicsBody?.friction = 0
+        enemy.physicsBody?.allowsRotation = false
+        enemy.physicsBody?.affectedByGravity = false
+        enemy.physicsBody?.restitution = 1
+        enemy.physicsBody?.linearDamping = 0
+        enemy.physicsBody?.angularDamping = 0
+        self.addChild(enemy)
+        enemy.physicsBody?.applyImpulse(CGVector(dx: 20, dy: 20))
+        
     }
     
     
@@ -182,6 +226,7 @@ class GameScene: SKScene {
         var actionArray = [SKAction]()
 
         player.removeAllActions()
+        player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
 
         let diff_x:Double = Double(pos.x - player.position.x)
 
