@@ -144,6 +144,49 @@ class GameScene: SKScene {
         player.run(SKAction.sequence(actionArray))
     }
     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+    }
+    
+    func touchMoved(toPoint pos: CGPoint) {
+        
+        print("touch moved")
+        
+        var actionArray = [SKAction]()
+                
+        let diff_x:Double = Double(pos.x - player.position.x)
+        
+        let diff_y:Double = Double(pos.y - player.position.y)
+        
+        let distance:Double = (pow(diff_x, 2) + pow(diff_y, 2)).squareRoot()
+        
+        let time:Double = distance / velocity
+        
+        print(time)
+        
+        actionArray.append(SKAction.move(to: pos, duration: time))
+        
+        
+        
+        player.run(SKAction.sequence(actionArray))
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    }
+    
+    func touchUp(atPoint pos: CGPoint) {
+        
+        print("touch ended")
+        
+        player.removeAllActions()
+
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
