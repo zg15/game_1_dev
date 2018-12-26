@@ -15,7 +15,7 @@ class GameScene: SKScene {
 //    private var spinnyNode : SKShapeNode?
     var player:SKSpriteNode!
     
-    var velocity:Double! = 200
+    var velocity:Double! = 500
     
     var cam: SKCameraNode?
     
@@ -29,9 +29,31 @@ class GameScene: SKScene {
         
         player.position = CGPoint(x: 60, y: 200)
         
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
+        
+        player.physicsBody?.isDynamic = true
+        player.physicsBody?.friction = 0
+        player.physicsBody?.allowsRotation = false
+        player.physicsBody?.affectedByGravity = false
+        player.physicsBody?.restitution = 1
+        player.physicsBody?.linearDamping = 0
+        player.physicsBody?.angularDamping = 0
+        
         self.addChild(player)
         
         self.addChild(cam!)
+        
+        for node in self.children {
+            if node.name == "map_1" {
+                if let someTileMap:SKTileMapNode = node as? SKTileMapNode {
+                    print(1)
+                    giveObstaclePhysicsBody(tileMap: someTileMap)
+                    someTileMap.removeFromParent()
+                }
+            }
+        }
+        
+//        player.physicsBody?.applyImpulse(CGVector(dx: 180, dy: 200))
 
 //        var ball_2 = self.childNode(withName: "ball") as! SKSpriteNode
 //
@@ -113,76 +135,112 @@ class GameScene: SKScene {
 //    }
     
     
+    func giveObstaclePhysicsBody(tileMap: SKTileMapNode) {
+        let startingLocation: CGPoint = tileMap.position
+        let tileSize = tileMap.tileSize
+        let halfWidth = CGFloat(tileMap.numberOfColumns) / 2.0 * tileSize.width
+        let halfHeight = CGFloat(tileMap.numberOfRows) / 2.0 * tileSize.height
+        
+        for col in 0..<tileMap.numberOfColumns {
+            for row in 0..<tileMap.numberOfRows {
+                if let tileDefinition = tileMap.tileDefinition(atColumn: col, row: row) {
+                    let tileArray = tileDefinition.textures
+                    let tileTexture = tileArray[0]
+                    let x = CGFloat(col) * tileSize.width - halfWidth + (tileSize.width / 2)
+                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+                    
+                    let tileNode = SKSpriteNode(texture: tileTexture)
+                    tileNode.position = CGPoint(x:x, y:y)
+                    tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+//                    tileNode.physicsBody?.linearDamping = 60.0
+                    tileNode.physicsBody?.affectedByGravity = false
+                    tileNode.physicsBody?.allowsRotation = false
+                    tileNode.physicsBody?.isDynamic = false
+                    tileNode.physicsBody?.friction = 0
+                    tileNode.physicsBody?.restitution = 1
+                    
+                    self.addChild(tileNode)
+                    
+                    tileNode.position = CGPoint(x: tileNode.position.x + startingLocation.x, y:
+                        tileNode.position.y + startingLocation.y)
+                    
+                }
+            }
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             self.touchDown(atPoint: t.location(in: self))
         }
     }
-    
+
     func touchDown(atPoint pos: CGPoint) {
-        
+
         print("touch down")
-        
+
         var actionArray = [SKAction]()
-        
+
         player.removeAllActions()
-        
+
         let diff_x:Double = Double(pos.x - player.position.x)
-        
+
         let diff_y:Double = Double(pos.y - player.position.y)
-        
+
         let distance:Double = (pow(diff_x, 2) + pow(diff_y, 2)).squareRoot()
-        
+
         let time:Double = distance / velocity
-        
+
         print(time)
         
-        actionArray.append(SKAction.move(to: pos, duration: time))
-        
-        
-        
+        actionArray.append(SKAction.moveBy(x: CGFloat(diff_x), y: CGFloat(diff_y), duration: time))
+
+//        actionArray.append(SKAction.move(to: pos, duration: time))
+
+
+
         player.run(SKAction.sequence(actionArray))
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    func touchMoved(toPoint pos: CGPoint) {
-        
-        print("touch moved")
-        
-        var actionArray = [SKAction]()
-                
-        let diff_x:Double = Double(pos.x - player.position.x)
-        
-        let diff_y:Double = Double(pos.y - player.position.y)
-        
-        let distance:Double = (pow(diff_x, 2) + pow(diff_y, 2)).squareRoot()
-        
-        let time:Double = distance / velocity
-        
-        print(time)
-        
-        actionArray.append(SKAction.move(to: pos, duration: time))
-        
-        
-        
-        player.run(SKAction.sequence(actionArray))
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
 
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+//    }
+
+    func touchMoved(toPoint pos: CGPoint) {
+
+        print("touch moved")
+
+        var actionArray = [SKAction]()
+
+        let diff_x:Double = Double(pos.x - player.position.x)
+
+        let diff_y:Double = Double(pos.y - player.position.y)
+
+        let distance:Double = (pow(diff_x, 2) + pow(diff_y, 2)).squareRoot()
+
+        let time:Double = distance / velocity
+
+        print(time)
+
+//        actionArray.append(SKAction.move(to: pos, duration: time))
+
+        actionArray.append(SKAction.moveBy(x: CGFloat(diff_x), y: CGFloat(diff_y), duration: time))
+
+        player.run(SKAction.sequence(actionArray))
     }
-    
+
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+//    }
+//
+//    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+//    }
+
     func touchUp(atPoint pos: CGPoint) {
-        
+
         print("touch ended")
-        
+
         player.removeAllActions()
 
     }
